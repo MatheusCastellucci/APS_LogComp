@@ -1,0 +1,12 @@
+function fibonacci(n)
+    if n equals 0
+        return 0;
+    else if n equals 1
+        return 1;
+    else
+        return fibonacci(n minus 1) plus fibonacci(n minus 2);
+    end
+end
+
+let result is fibonacci(5);
+print result;

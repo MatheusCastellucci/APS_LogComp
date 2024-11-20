@@ -1,0 +1,3 @@
+if not (a equals b)
+    print "a and b are not equal";
+end

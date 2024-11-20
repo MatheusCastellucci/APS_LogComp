@@ -1,0 +1,3 @@
+let a;
+let b is 5;
+a is b plus 10;

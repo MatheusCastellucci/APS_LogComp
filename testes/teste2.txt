@@ -1,0 +1,5 @@
+let counter is 0;
+while counter less than 5
+    print counter;
+    counter is counter plus 1;
+end
