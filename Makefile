@@ -1,29 +1,29 @@
 CC = clang
-CFLAGS = -Wall -g `llvm-config --cflags`
-LDFLAGS = `llvm-config --libs` -lm
+CFLAGS = -Wall -g -Wno-unused-function `llvm-config --cflags`
+LDFLAGS = `llvm-config --libs core executionengine interpreter analysis native` -lm
 
-all: zen
+all: mylang
 
-zen: lex.yy.o zen.tab.o symbol_table.o codegen.o
-	$(CC) $(CFLAGS) -o zen lex.yy.o zen.tab.o symbol_table.o codegen.o $(LDFLAGS)
+mylang: lexer.o parser.o ast.o codegen.o
+	$(CC) $(CFLAGS) -o mylang lexer.o parser.o ast.o codegen.o $(LDFLAGS)
 
-zen.tab.c zen.tab.h: zen.y
-	bison -d zen.y
+lexer.o: lexer.c parser.h ast.h
+	$(CC) $(CFLAGS) -c lexer.c
 
-lex.yy.c: zen.l zen.tab.h
-	flex zen.l
+parser.o: parser.c parser.h ast.h
+	$(CC) $(CFLAGS) -c parser.c
 
-zen.tab.o: zen.tab.c codegen.h symbol_table.h
-	$(CC) $(CFLAGS) -c zen.tab.c
+parser.h: parser.y
+	bison -d -o parser.c parser.y
 
-lex.yy.o: lex.yy.c
-	$(CC) $(CFLAGS) -c lex.yy.c
+lexer.c: lexer.l
+	flex -o lexer.c lexer.l
 
-symbol_table.o: symbol_table.c symbol_table.h
-	$(CC) $(CFLAGS) -c symbol_table.c
+ast.o: ast.c ast.h
+	$(CC) $(CFLAGS) -c ast.c
 
-codegen.o: codegen.c codegen.h symbol_table.h
+codegen.o: codegen.c codegen.h ast.h
 	$(CC) $(CFLAGS) -c codegen.c
 
 clean:
-	rm -f zen lex.yy.c zen.tab.c zen.tab.h *.o
+	rm -f mylang lexer.c parser.c parser.h *.o

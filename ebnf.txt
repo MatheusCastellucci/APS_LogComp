@@ -1,85 +1,47 @@
-<program>          ::= { <statement> }
+<program>         ::= <statements>
 
-<statement>        ::= <variable_declaration>
-                     | <assignment>
-                     | <function_declaration>
-                     | <control_structure>
-                     | <expression_statement>
-                     | <print_statement>
-                     | <return_statement>
-                     | <empty_statement>
+<statements>      ::= <statement> | <statement> <statements>
 
-<variable_declaration> ::= "let" <identifier> [ "is" <expression> ] ";"
+<statement>       ::= <variable_declaration>
+                    | <assignment>
+                    | <function_declaration>
+                    | <function_call>
+                    | <if_statement>
+                    | <while_loop>
+                    | <print_statement>
+                    | <return_statement>
 
-<assignment>       ::= <identifier> "is" <expression> ";"
+<variable_declaration> ::= "let" <identifier> ["is" <expression>] ";"
 
-<function_declaration> ::= "function" <identifier> "(" [ <parameter_list> ] ")" { <statement> } "end"
+<assignment>      ::= <identifier> "is" <expression> ";"
 
-<parameter_list>   ::= <identifier> { "," <identifier> }
+<function_declaration> ::= "function" <identifier> "(" [<parameter_list>] ")" <block>
 
-<control_structure> ::= <if_statement>
-                      | <while_loop>
-                      | <for_loop>
+<parameter_list>  ::= <identifier> | <identifier> "," <parameter_list>
 
-<if_statement>     ::= "if" <expression> <statements> [ <else_clause> ] "end"
+<function_call>   ::= <identifier> "(" [<argument_list>] ")" ";"
 
-<else_clause>      ::= "else" <statements>
-                     | /* empty */
+<argument_list>   ::= <expression> | <expression> "," <argument_list>
 
-<while_loop>       ::= "while" <expression> <statements> "end"
+<if_statement>    ::= "if" <expression> <block> ["else" <block>]
 
-<for_loop>         ::= "for" <identifier> "in" <expression> <statements> "end"
+<while_loop>      ::= "while" <expression> <block>
 
-<expression_statement> ::= <expression> ";"
+<print_statement> ::= "print" <expression> ";"
 
-<print_statement>  ::= "print" <expression> ";"
+<return_statement>::= "return" <expression> ";"
 
-<return_statement> ::= "return" <expression> ";"
+<block>           ::= "{" <statements> "}"
 
-<empty_statement>  ::= ";"
+<expression>      ::= <expression> <addop> <term> | <term>
+<term>            ::= <term> <mulop> <factor> | <factor>
+<factor>          ::= "(" <expression> ")" | <number> | <identifier> | <function_call>
 
-<statements>       ::= { <statement> }
+<addop>           ::= "+" | "-"
+<mulop>           ::= "*" | "/"
 
-<expression>       ::= <logical_or_expression>
+<identifier>      ::= <letter> {<letter> | <digit>}
+<number>          ::= <digit> {<digit>}
 
-<logical_or_expression> ::= <logical_and_expression> { "or" <logical_and_expression> }
-
-<logical_and_expression> ::= <equality_expression> { "and" <equality_expression> }
-
-<equality_expression> ::= <relational_expression> { ( "equals" | "not equals" ) <relational_expression> }
-
-<relational_expression> ::= <additive_expression> { ( "greater than" | "less than" | "greater or equal" | "less or equal" ) <additive_expression> }
-
-<additive_expression> ::= <additive_expression> ( "plus" | "minus" ) <multiplicative_expression>
-                        | <multiplicative_expression>
-
-<multiplicative_expression> ::= <multiplicative_expression> ( "times" | "divided by" ) <unary_expression>
-                              | <unary_expression>
-
-<unary_expression>   ::= [ "not" | "minus" ] <primary_expression>
-
-<primary_expression> ::= <number>
-                       | <string>
-                       | <identifier>
-                       | "(" <expression> ")"
-                       | <function_call>
-
-<function_call>      ::= <identifier> "(" [ <argument_list> ] ")"
-
-<argument_list>      ::= <expression> { "," <expression> }
-
-<number>             ::= <digit> { <digit> }
-
-<string>             ::= "\"" { <any_character_except_quote> } "\""
-
-<identifier>         ::= <letter> { <letter_or_digit_or_underscore> }
-
-<statements>         ::= { <statement> }
-
-<digit>              ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-
-<letter>             ::= "a" | "b" | ... | "z" | "A" | "B" | ... | "Z" | "_"
-
-<letter_or_digit_or_underscore> ::= <letter> | <digit> | "_"
-
-<any_character_except_quote> ::= /* any character except " */
+<letter>          ::= "a" | ... | "z" | "A" | ... | "Z"
+<digit>           ::= "0" | ... | "9"

@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_ZEN_TAB_H_INCLUDED
-# define YY_YY_ZEN_TAB_H_INCLUDED
+#ifndef YY_YY_PARSER_H_INCLUDED
+# define YY_YY_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -54,40 +54,32 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    NUMBER = 258,                  /* NUMBER  */
-    STRING = 259,                  /* STRING  */
-    IDENTIFIER = 260,              /* IDENTIFIER  */
-    LET = 261,                     /* LET  */
-    IS = 262,                      /* IS  */
-    IF = 263,                      /* IF  */
-    ELSE = 264,                    /* ELSE  */
-    WHILE = 265,                   /* WHILE  */
-    FOR = 266,                     /* FOR  */
-    IN = 267,                      /* IN  */
-    FUNCTION = 268,                /* FUNCTION  */
-    END = 269,                     /* END  */
-    RETURN = 270,                  /* RETURN  */
-    PRINT = 271,                   /* PRINT  */
-    INPUT = 272,                   /* INPUT  */
-    PLUS = 273,                    /* PLUS  */
-    MINUS = 274,                   /* MINUS  */
-    TIMES = 275,                   /* TIMES  */
-    DIVIDED_BY = 276,              /* DIVIDED_BY  */
-    EQUALS = 277,                  /* EQUALS  */
-    NOT_EQUALS = 278,              /* NOT_EQUALS  */
-    GREATER_THAN = 279,            /* GREATER_THAN  */
-    LESS_THAN = 280,               /* LESS_THAN  */
-    GREATER_OR_EQUAL = 281,        /* GREATER_OR_EQUAL  */
-    LESS_OR_EQUAL = 282,           /* LESS_OR_EQUAL  */
-    AND = 283,                     /* AND  */
-    OR = 284,                      /* OR  */
-    NOT = 285,                     /* NOT  */
-    SEMICOLON = 286,               /* SEMICOLON  */
-    COMMA = 287,                   /* COMMA  */
-    LPAREN = 288,                  /* LPAREN  */
-    RPAREN = 289,                  /* RPAREN  */
-    UMINUS = 290,                  /* UMINUS  */
-    LOWEST = 291                   /* LOWEST  */
+    IDENTIFIER = 258,              /* IDENTIFIER  */
+    NUMBER = 259,                  /* NUMBER  */
+    LET = 260,                     /* LET  */
+    FUNCTION = 261,                /* FUNCTION  */
+    IF = 262,                      /* IF  */
+    ELSE = 263,                    /* ELSE  */
+    WHILE = 264,                   /* WHILE  */
+    PRINT = 265,                   /* PRINT  */
+    RETURN = 266,                  /* RETURN  */
+    IS = 267,                      /* IS  */
+    LBRACE = 268,                  /* LBRACE  */
+    RBRACE = 269,                  /* RBRACE  */
+    LPAREN = 270,                  /* LPAREN  */
+    RPAREN = 271,                  /* RPAREN  */
+    SEMICOLON = 272,               /* SEMICOLON  */
+    COMMA = 273,                   /* COMMA  */
+    PLUS = 274,                    /* PLUS  */
+    MINUS = 275,                   /* MINUS  */
+    MULTIPLY = 276,                /* MULTIPLY  */
+    DIVIDE = 277,                  /* DIVIDE  */
+    GT = 278,                      /* GT  */
+    LT = 279,                      /* LT  */
+    GE = 280,                      /* GE  */
+    LE = 281,                      /* LE  */
+    EQ = 282,                      /* EQ  */
+    NE = 283                       /* NE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -96,18 +88,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 40 "zen.y"
+#line 15 "parser.y"
 
-    int intVal;
-    char* strVal;
-    LLVMValueRef value;
-    struct ParamList* paramList;
-    struct ArgList* argList;
-    struct ElseClause* else_clause;
-    struct Statements* statements;
-    struct Statement* statement;
+    int num;               // For numeric values
+    char *id;              // For identifiers
+    ASTNode *node;         // For AST nodes
+    ASTNodeList *node_list; // For lists of AST nodes
 
-#line 111 "zen.tab.h"
+#line 99 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -122,4 +110,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_ZEN_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_H_INCLUDED  */
