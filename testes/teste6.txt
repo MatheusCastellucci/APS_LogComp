@@ -1,3 +1,11 @@
-if not (a equals b)
-    print "a and b are not equal";
+// Test recursive function (e.g., factorial)
+function factorial(n)
+    if n == 0
+        return 1;
+    else
+        return n * factorial(n - 1);
+    end
 end
+
+let fact5 is factorial(5);
+print fact5;

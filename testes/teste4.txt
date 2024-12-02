@@ -1,3 +1,7 @@
-if (a greater than b) and (b greater than 0)
-    print "a is greater than b and b is positive";
+// Test for loop (assuming 'for' loops iterate from 0 to n-1)
+for i in 5
+    print i;
 end
+
+// Simulate a range (if your language supports it)
+// If 'for' loops don't support ranges, adjust accordingly

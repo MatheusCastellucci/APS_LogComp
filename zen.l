@@ -1,61 +1,66 @@
 %{
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <llvm-c/Core.h>
+    #include <llvm-c/ExecutionEngine.h>
+    #include <llvm-c/Target.h>
+    #include <llvm-c/Analysis.h>
     #include "zen.tab.h"
+    #include "symbol_table.h"
 %}
 
 %%
 
-/* Palavras-chave */
-"let"                   return LET;
-"is"                    return IS;
-"if"                    return IF;
-"else"                  return ELSE;
-"while"                 return WHILE;
-"function"              return FUNCTION;
-"end"                   return END;
-"return"                return RETURN;
-"print"                 return PRINT;
-"input"                 return INPUT;
+[ \t\n]+             { /* Ignore whitespace */ }
+"//".*               { /* Ignore single-line comments */ }
+"/*"[^*]*"*"*[^*/]*"*/"  { /* Ignore multi-line comments */ }
 
-/* Operadores matemáticos */
-"plus"                  return PLUS;
-"minus"                 return MINUS;
-"times"                 return TIMES;
-"divided by"            return DIVIDED_BY;
+"let"                { return LET; }
+"is"                 { return IS; }
+"if"                 { return IF; }
+"else"               { return ELSE; }
+"while"              { return WHILE; }
+"for"                { return FOR; }
+"in"                 { return IN; }
+"function"           { return FUNCTION; }
+"end"                { return END; }
+"return"             { return RETURN; }
+"print"              { return PRINT; }
+"input"              { return INPUT; }
+"and"                { return AND; }
+"or"                 { return OR; }
+"not"                { return NOT; }
 
-/* Operadores de comparação */
-"equals"                return EQUALS;
-"not equals"            return NOT_EQUALS;
-"greater than"          return GREATER_THAN;
-"less than"             return LESS_THAN;
-"greater or equal"      return GREATER_OR_EQUAL;
-"less or equal"         return LESS_OR_EQUAL;
+"+"                  { return PLUS; }
+"-"                  { return MINUS; }
+"*"                  { return TIMES; }
+"/"                  { return DIVIDED_BY; }
+"=="                 { return EQUALS; }
+"!="                 { return NOT_EQUALS; }
+">"                  { return GREATER_THAN; }
+"<"                  { return LESS_THAN; }
+">="                 { return GREATER_OR_EQUAL; }
+"<="                 { return LESS_OR_EQUAL; }
+";"                  { return SEMICOLON; }
+","                  { return COMMA; }
+"("                  { return LPAREN; }
+")"                  { return RPAREN; }
 
-/* Operadores lógicos */
-"and"                   return AND;
-"or"                    return OR;
-"not"                   return NOT;
+[0-9]+               {
+                        yylval.intVal = atoi(yytext);
+                        return NUMBER;
+                    }
 
-/* Literais */
-[0-9]+                  { yylval.intVal = atoi(yytext); return NUMBER; }
-\"([^\\\"]|\\.)*\"      { yylval.strVal = strdup(yytext); return STRING; }
+[a-zA-Z_][a-zA-Z0-9_]* {
+                        yylval.strVal = strdup(yytext);
+                        return IDENTIFIER;
+                    }
 
-/* Identificadores */
-[a-zA-Z_][a-zA-Z0-9_]*  { yylval.strVal = strdup(yytext); return IDENTIFIER; }
-
-/* Símbolos e pontuação */
-";"                     return SEMICOLON;
-","                     return COMMA;
-"("                     return LPAREN;
-")"                     return RPAREN;
-
-/* Espaços em branco (ignorar) */
-[ \t\r\n]+              /* ignore whitespace */
-
-/* Comentários (opcional) */
-"#".*                   /* ignore comments */
+.                    { fprintf(stderr, "Unknown character: %s\n", yytext); exit(1); }
 
 %%
 
-int yywrap(void) {
+int yywrap() {
     return 1;
 }

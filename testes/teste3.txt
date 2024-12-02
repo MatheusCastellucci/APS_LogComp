@@ -1,12 +1,13 @@
-function fibonacci(n)
-    if n equals 0
-        return 0;
-    else if n equals 1
-        return 1;
-    else
-        return fibonacci(n minus 1) plus fibonacci(n minus 2);
-    end
+// Test while loop
+let counter is 0;
+while counter < 5
+    print counter;
+    counter is counter + 1;
 end
 
-let result is fibonacci(5);
-print result;
+// Test while loop with condition modification inside loop
+let value is 10;
+while value > 0
+    print value;
+    value is value - 2;
+end

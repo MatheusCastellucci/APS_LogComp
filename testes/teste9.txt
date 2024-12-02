@@ -1,0 +1,17 @@
+// Implementing the Fibonacci sequence
+function fibonacci(n)
+    if n == 0
+        return 0;
+    else if n == 1
+        return 1;
+    else
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    end
+end
+
+let i is 0;
+while i < 10
+    let fib is fibonacci(i);
+    print fib;
+    i is i + 1;
+end

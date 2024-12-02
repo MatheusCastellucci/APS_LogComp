@@ -1,5 +1,21 @@
-let counter is 0;
-while counter less than 5
-    print counter;
-    counter is counter plus 1;
+// Test if statement without else
+let num is 10;
+if num > 5
+    print num;
+end
+
+// Test if-else statement
+if num < 5
+    print 0;
+else
+    print 1;
+end
+
+// Test nested if statements
+if num > 0
+    if num % 2 == 0
+        print 2;
+    else
+        print 3;
+    end
 end
