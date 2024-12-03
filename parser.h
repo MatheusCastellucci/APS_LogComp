@@ -57,30 +57,26 @@ extern int yydebug;
     IDENTIFIER = 258,              /* IDENTIFIER  */
     NUMBER = 259,                  /* NUMBER  */
     LET = 260,                     /* LET  */
-    FUNCTION = 261,                /* FUNCTION  */
-    IF = 262,                      /* IF  */
-    ELSE = 263,                    /* ELSE  */
-    WHILE = 264,                   /* WHILE  */
-    PRINT = 265,                   /* PRINT  */
-    RETURN = 266,                  /* RETURN  */
-    IS = 267,                      /* IS  */
-    END = 268,                     /* END  */
-    LBRACE = 269,                  /* LBRACE  */
-    RBRACE = 270,                  /* RBRACE  */
-    LPAREN = 271,                  /* LPAREN  */
-    RPAREN = 272,                  /* RPAREN  */
-    SEMICOLON = 273,               /* SEMICOLON  */
-    COMMA = 274,                   /* COMMA  */
-    PLUS = 275,                    /* PLUS  */
-    MINUS = 276,                   /* MINUS  */
-    MULTIPLY = 277,                /* MULTIPLY  */
-    DIVIDE = 278,                  /* DIVIDE  */
-    GT = 279,                      /* GT  */
-    LT = 280,                      /* LT  */
-    GE = 281,                      /* GE  */
-    LE = 282,                      /* LE  */
-    EQ = 283,                      /* EQ  */
-    NE = 284                       /* NE  */
+    IF = 261,                      /* IF  */
+    ELSE = 262,                    /* ELSE  */
+    WHILE = 263,                   /* WHILE  */
+    PRINT = 264,                   /* PRINT  */
+    IS = 265,                      /* IS  */
+    LBRACE = 266,                  /* LBRACE  */
+    RBRACE = 267,                  /* RBRACE  */
+    SEMICOLON = 268,               /* SEMICOLON  */
+    LPAREN = 269,                  /* LPAREN  */
+    RPAREN = 270,                  /* RPAREN  */
+    PLUS = 271,                    /* PLUS  */
+    MINUS = 272,                   /* MINUS  */
+    MULTIPLY = 273,                /* MULTIPLY  */
+    DIVIDE = 274,                  /* DIVIDE  */
+    GT = 275,                      /* GT  */
+    LT = 276,                      /* LT  */
+    GE = 277,                      /* GE  */
+    LE = 278,                      /* LE  */
+    EQ = 279,                      /* EQ  */
+    NE = 280                       /* NE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,14 +85,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "parser.y"
+#line 19 "parser.y"
 
-    int num;               // For numeric values
-    char *id;              // For identifiers
-    ASTNode *node;         // For AST nodes
-    ASTNodeList *node_list; // For lists of AST nodes
+    int num;               // Para valores numéricos
+    char *id;              // Para identificadores
+    ASTNode *node;         // Para nós da AST
+    ASTNodeList *node_list; // Para listas de nós da AST
 
-#line 100 "parser.h"
+#line 96 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,0 +1,8 @@
+let x is 5;
+if x > 3 {
+    print x;
+    print 10;
+} else {
+    print 0;
+    print 1;
+}

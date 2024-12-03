@@ -4,218 +4,183 @@
 #include "ast.h"
 #include "codegen.h"
 
-extern int yylex();
-void yyerror(const char *s);
+extern FILE *yyin; // Declaração para redirecionar a entrada do lexer
 
-ASTNode *ast_root;
+// Declaração de funções externas e variáveis globais
+extern int yylex(); // Função do lexer
+void yyerror(const char *s); // Função para reportar erros no parser
+
+ASTNode *ast_root; // Raiz da AST (Árvore Sintática Abstrata)
 %}
 
 %defines "parser.h"
 
+// Definição de tipos para o parser
 %union {
-    int num;               // For numeric values
-    char *id;              // For identifiers
-    ASTNode *node;         // For AST nodes
-    ASTNodeList *node_list; // For lists of AST nodes
+    int num;               // Para valores numéricos
+    char *id;              // Para identificadores
+    ASTNode *node;         // Para nós da AST
+    ASTNodeList *node_list; // Para listas de nós da AST
 }
 
+// Declaração dos tokens
 %token <id> IDENTIFIER
 %token <num> NUMBER
-%token LET FUNCTION IF ELSE WHILE PRINT RETURN IS END
-%token LBRACE RBRACE LPAREN RPAREN SEMICOLON COMMA
+%token LET IF ELSE WHILE PRINT IS
+%token LBRACE RBRACE SEMICOLON LPAREN RPAREN
 %token PLUS MINUS MULTIPLY DIVIDE GT LT GE LE EQ NE
 
-%type <node> program statement expression term factor variable_declaration assignment function_declaration function_call if_statement while_loop print_statement return_statement block
-%type <node_list> statements parameter_list argument_list
+// Declaração dos tipos retornados pelas regras
+%type <node> program statement expression term factor variable_declaration assignment if_statement while_loop print_statement block
+%type <node_list> statements
 
 %%
 
+// Regra principal do programa
 program:
     statements { 
-        printf("Debug: Parsed program\n");
-        ast_root = create_block_node($1); 
+        ast_root = create_block_node($1); // Cria a raiz da AST como um bloco com as declarações
     }
     ;
 
+// Conjunto de declarações (statements)
 statements:
     statement { 
-        printf("Debug: Parsed single statement\n");
-        $$ = create_statement_list($1, NULL); 
+        $$ = create_statement_list($1, NULL); // Lista com uma única declaração
     }
     | statement statements { 
-        printf("Debug: Parsed multiple statements\n");
-        $$ = create_statement_list($1, $2); 
+        $$ = create_statement_list($1, $2); // Lista com múltiplas declarações
     }
     ;
 
+// Declaração de uma única instrução
 statement:
     variable_declaration
     | assignment
-    | function_declaration
-    | function_call
     | if_statement
     | while_loop
     | print_statement
-    | return_statement
-    ;
+;
 
+// Declaração de variável
 variable_declaration:
     LET IDENTIFIER SEMICOLON { 
-        printf("Debug: Parsed variable declaration 'let %s;'\n", $2);
-        $$ = create_var_decl_node($2, NULL); 
+        $$ = create_var_decl_node($2, NULL); // Declara variável sem inicialização
     }
     | LET IDENTIFIER IS expression SEMICOLON { 
-        printf("Debug: Parsed variable declaration 'let %s is <expression>'\n", $2);
-        $$ = create_var_decl_node($2, $4); 
+        $$ = create_var_decl_node($2, $4); // Declara variável com inicialização
     }
     ;
 
+// Atribuição de valor a uma variável
 assignment:
     IDENTIFIER IS expression SEMICOLON { 
-        printf("Debug: Parsed assignment '%s is <expression>'\n", $1);
         $$ = create_assignment_node($1, $3); 
     }
     ;
 
-function_declaration:
-    FUNCTION IDENTIFIER LPAREN parameter_list RPAREN block { 
-        printf("Debug: Parsed function declaration with parameters\n");
-        $$ = create_function_node($2, $4, (ASTNodeList *)$6); 
-    }
-    | FUNCTION IDENTIFIER LPAREN RPAREN block { 
-        printf("Debug: Parsed function declaration without parameters\n");
-        $$ = create_function_node($2, NULL, (ASTNodeList *)$5); 
-    }
-    ;
-
-parameter_list:
-    IDENTIFIER { 
-        printf("Debug: Parsed parameter list with single parameter '%s'\n", $1);
-        $$ = create_parameter_list($1, NULL); 
-    }
-    | IDENTIFIER COMMA parameter_list { 
-        printf("Debug: Parsed parameter list with multiple parameters\n");
-        $$ = create_parameter_list($1, $3); 
-    }
-    ;
-
-function_call:
-    IDENTIFIER LPAREN argument_list RPAREN SEMICOLON { 
-        printf("Debug: Parsed function call with arguments\n");
-        $$ = create_function_call_node($1, $3); 
-    }
-    | IDENTIFIER LPAREN RPAREN SEMICOLON { 
-        printf("Debug: Parsed function call without arguments\n");
-        $$ = create_function_call_node($1, NULL); 
-    }
-    ;
-
-argument_list:
-    expression { 
-        printf("Debug: Parsed argument list with single expression\n");
-        $$ = create_argument_list($1, NULL); 
-    }
-    | expression COMMA argument_list { 
-        printf("Debug: Parsed argument list with multiple expressions\n");
-        $$ = create_argument_list($1, $3); 
-    }
-    ;
-
+// Estrutura condicional (if/else)
 if_statement:
-    IF expression block END { 
-        printf("Debug: Parsed if statement without else\n");
-        $$ = create_if_node($2, $3, NULL); 
+    IF expression block { 
+        $$ = create_if_node($2, create_block_node($3->body), NULL); // Condicional sem bloco else
     }
-    | IF expression block ELSE block END { 
-        printf("Debug: Parsed if statement with else\n");
-        $$ = create_if_node($2, $3, $5); 
+    | IF expression block ELSE block { 
+        $$ = create_if_node($2, create_block_node($3->body), create_block_node($5->body)); // Condicional com bloco else
     }
     ;
 
+// Estrutura de repetição (while)
 while_loop:
     WHILE expression block { 
-        printf("Debug: Parsed while loop\n");
-        $$ = create_while_node($2, (ASTNodeList *)$3); 
+        $$ = create_while_node($2, $3->body); // Laço while com corpo de instruções
     }
     ;
 
+// Comando de impressão
 print_statement:
     PRINT expression SEMICOLON { 
-        printf("Debug: Parsed print statement\n");
-        $$ = create_print_node($2); 
+        $$ = create_print_node($2); // Imprime a expressão
     }
     ;
 
-return_statement:
-    RETURN expression SEMICOLON { 
-        printf("Debug: Parsed return statement\n");
-        $$ = create_return_node($2); 
-    }
-    ;
-
+// Bloco de instruções
 block:
     LBRACE statements RBRACE { 
-        printf("Debug: Parsed block\n");
-        $$ = create_block_node((ASTNodeList *)$2); 
+        $$ = create_block_node((ASTNodeList *)$2); // Conjunto de instruções dentro de chaves
     }
     ;
 
+// Expressões (operações aritméticas e relacionais)
 expression:
-    expression PLUS term { $$ = create_binop_node('+', $1, $3); }
-    | expression MINUS term { $$ = create_binop_node('-', $1, $3); }
-    | term { $$ = $1; }
-    | expression GT term { $$ = create_binop_node('>', $1, $3); }
-    | expression LT term { $$ = create_binop_node('<', $1, $3); }
-    | expression GE term { $$ = create_binop_node('G', $1, $3); } // Use 'G' for >=
-    | expression LE term { $$ = create_binop_node('L', $1, $3); } // Use 'L' for <=
-    | expression EQ term { $$ = create_binop_node('=', $1, $3); }
-    | expression NE term { $$ = create_binop_node('!', $1, $3); }
+    expression PLUS term { $$ = create_binop_node('+', $1, $3); } // Soma
+    | expression MINUS term { $$ = create_binop_node('-', $1, $3); } // Subtração
+    | term { $$ = $1; } // Termo isolado
+    | expression GT term { $$ = create_binop_node('>', $1, $3); } // Maior que
+    | expression LT term { $$ = create_binop_node('<', $1, $3); } // Menor que
+    | expression GE term { $$ = create_binop_node('G', $1, $3); } // Maior ou igual
+    | expression LE term { $$ = create_binop_node('L', $1, $3); } // Menor ou igual
+    | expression EQ term { $$ = create_binop_node('=', $1, $3); } // Igualdade
+    | expression NE term { $$ = create_binop_node('!', $1, $3); } // Diferente
     ;
 
+// Termos (operações de multiplicação e divisão)
 term:
     term MULTIPLY factor { 
-        printf("Debug: Parsed multiplication term\n");
-        $$ = create_binop_node('*', $1, $3); 
+        $$ = create_binop_node('*', $1, $3); // Multiplicação
     }
     | term DIVIDE factor { 
-        printf("Debug: Parsed division term\n");
-        $$ = create_binop_node('/', $1, $3); 
+        $$ = create_binop_node('/', $1, $3); // Divisão
     }
     | factor { 
-        $$ = $1; 
+        $$ = $1; // Fator isolado
     }
     ;
 
+// Fatores (números, identificadores, expressões entre parênteses)
 factor:
     LPAREN expression RPAREN { 
-        printf("Debug: Parsed parenthesized expression\n");
-        $$ = $2; 
+        $$ = $2; // Expressão entre parênteses
     }
     | NUMBER { 
-        printf("Debug: Parsed number: %d\n", $1);
-        $$ = create_number_node($1); 
+        $$ = create_number_node($1); // Número inteiro
     }
     | IDENTIFIER { 
-        printf("Debug: Parsed identifier: %s\n", $1);
-        $$ = create_identifier_node($1); 
-    }
-    | function_call { 
-        $$ = $1; 
+        $$ = create_identifier_node($1); // Identificador
     }
     ;
 
 %%
 
-int main() {
+// Função principal do programa
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        fprintf(stderr, "Uso: %s <arquivo.sns>\n", argv[0]);
+        return 1;
+    }
+
+    // Abre o arquivo fornecido
+    FILE *file = fopen(argv[1], "r");
+    if (!file) {
+        fprintf(stderr, "Erro: Não foi possível abrir o arquivo %s\n", argv[1]);
+        return 1;
+    }
+
+    // Redireciona o arquivo para o lexer
+    yyin = file;
+
+    // Processa o arquivo com o parser
     if (yyparse() == 0) {
         codegen(ast_root);
     }
+
+    fclose(file);
     return 0;
 }
 
+// Função para reportar erros de parsing
 extern int yylineno;
 
 void yyerror(const char *s) {
-    fprintf(stderr, "Parse error at line %d: %s\n", yylineno, s);
+    fprintf(stderr, "Erro de parsing na linha %d: %s\n", yylineno, s);
     exit(1);
 }

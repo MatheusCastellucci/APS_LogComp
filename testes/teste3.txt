@@ -1,6 +1,5 @@
-function add(a, b)
-    return a + b;
-end
-
-let result is add(10, 20);
-print result;
+let x is 0;
+while x < 5 {
+    print x;
+    x is x + 1;
+}

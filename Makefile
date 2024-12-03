@@ -2,10 +2,10 @@ CC = clang
 CFLAGS = -Wall -g -Wno-unused-function `llvm-config --cflags`
 LDFLAGS = `llvm-config --libs core executionengine interpreter analysis native` -lm
 
-all: mylang
+all: sensei
 
-mylang: lexer.o parser.o ast.o codegen.o
-	$(CC) $(CFLAGS) -o mylang lexer.o parser.o ast.o codegen.o $(LDFLAGS)
+sensei: lexer.o parser.o ast.o codegen.o
+	$(CC) $(CFLAGS) -o sensei lexer.o parser.o ast.o codegen.o $(LDFLAGS)
 
 lexer.o: lexer.c parser.h ast.h
 	$(CC) $(CFLAGS) -c lexer.c
@@ -26,4 +26,4 @@ codegen.o: codegen.c codegen.h ast.h
 	$(CC) $(CFLAGS) -c codegen.c
 
 clean:
-	rm -f mylang lexer.c parser.c parser.h *.o
+	rm -f sensei lexer.c parser.c parser.h *.o

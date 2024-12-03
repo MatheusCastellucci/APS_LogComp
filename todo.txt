@@ -1,0 +1,6 @@
+- Teste 0 funcionando!
+
+- Teste 1, 2 e 3 ainda não
+
+- Começar com o teste 1
+    - Rodar ele no gdb para sacar o erro e ir resolvendo slow and steady

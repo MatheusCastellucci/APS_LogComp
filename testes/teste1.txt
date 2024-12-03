@@ -1,6 +1,0 @@
-let x is 5;
-if x > 3
-    print x;
-else
-    print 0;
-end
