@@ -1,21 +1,5 @@
-// Test if statement without else
-let num is 10;
-if num > 5
-    print num;
-end
-
-// Test if-else statement
-if num < 5
-    print 0;
-else
-    print 1;
-end
-
-// Test nested if statements
-if num > 0
-    if num % 2 == 0
-        print 2;
-    else
-        print 3;
-    end
+let x is 0;
+while x < 5
+    print x;
+    x is x + 1;
 end

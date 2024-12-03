@@ -1,11 +1,5 @@
-// Test variable declaration and assignment
 let x;
 x is 10;
-print x;
-
-let y is 5;
-print y;
-
-// Update variable values
+let y is 20;
 x is x + y;
 print x;

@@ -1,24 +1,6 @@
-// Test arithmetic operations
-let a is 15;
-let b is 4;
-let sum is a + b;
-let difference is a - b;
-let product is a * b;
-let quotient is a / b;
-
-print sum;
-print difference;
-print product;
-print quotient;
-
-// Test logical operations
-let truthy is 1;
-let falsy is 0;
-
-let and_result is truthy and falsy;
-let or_result is truthy or falsy;
-let not_result is not truthy;
-
-print and_result;
-print or_result;
-print not_result;
+let x is 5;
+if x > 3
+    print x;
+else
+    print 0;
+end

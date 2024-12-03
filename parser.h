@@ -64,22 +64,23 @@ extern int yydebug;
     PRINT = 265,                   /* PRINT  */
     RETURN = 266,                  /* RETURN  */
     IS = 267,                      /* IS  */
-    LBRACE = 268,                  /* LBRACE  */
-    RBRACE = 269,                  /* RBRACE  */
-    LPAREN = 270,                  /* LPAREN  */
-    RPAREN = 271,                  /* RPAREN  */
-    SEMICOLON = 272,               /* SEMICOLON  */
-    COMMA = 273,                   /* COMMA  */
-    PLUS = 274,                    /* PLUS  */
-    MINUS = 275,                   /* MINUS  */
-    MULTIPLY = 276,                /* MULTIPLY  */
-    DIVIDE = 277,                  /* DIVIDE  */
-    GT = 278,                      /* GT  */
-    LT = 279,                      /* LT  */
-    GE = 280,                      /* GE  */
-    LE = 281,                      /* LE  */
-    EQ = 282,                      /* EQ  */
-    NE = 283                       /* NE  */
+    END = 268,                     /* END  */
+    LBRACE = 269,                  /* LBRACE  */
+    RBRACE = 270,                  /* RBRACE  */
+    LPAREN = 271,                  /* LPAREN  */
+    RPAREN = 272,                  /* RPAREN  */
+    SEMICOLON = 273,               /* SEMICOLON  */
+    COMMA = 274,                   /* COMMA  */
+    PLUS = 275,                    /* PLUS  */
+    MINUS = 276,                   /* MINUS  */
+    MULTIPLY = 277,                /* MULTIPLY  */
+    DIVIDE = 278,                  /* DIVIDE  */
+    GT = 279,                      /* GT  */
+    LT = 280,                      /* LT  */
+    GE = 281,                      /* GE  */
+    LE = 282,                      /* LE  */
+    EQ = 283,                      /* EQ  */
+    NE = 284                       /* NE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -95,7 +96,7 @@ union YYSTYPE
     ASTNode *node;         // For AST nodes
     ASTNodeList *node_list; // For lists of AST nodes
 
-#line 99 "parser.h"
+#line 100 "parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

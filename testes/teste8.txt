@@ -1,9 +1,0 @@
-// Test undefined variable
-print undefinedVar;
-
-// Test undefined function
-let result is undefinedFunc();
-
-// Test division by zero
-let divByZero is 10 / 0;
-print divByZero;

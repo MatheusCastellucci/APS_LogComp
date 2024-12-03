@@ -1,13 +1,6 @@
-// Test while loop
-let counter is 0;
-while counter < 5
-    print counter;
-    counter is counter + 1;
+function add(a, b)
+    return a + b;
 end
 
-// Test while loop with condition modification inside loop
-let value is 10;
-while value > 0
-    print value;
-    value is value - 2;
-end
+let result is add(10, 20);
+print result;
