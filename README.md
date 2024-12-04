@@ -1,113 +1,117 @@
-# APS_LogComp
 
+# Sensei Language
 
-## Estruturando a Linguagem Zen em EBNF
+Sensei é uma linguagem de programação minimalista e educacional, projetada para ensinar conceitos fundamentais de programação e compiladores. A linguagem possui uma sintaxe simples e intuitiva, ideal para iniciantes.
 
-Vamos começar definindo os conceitos e características que queremos na linguagem zen:
+## Funcionalidades da Linguagem
 
-* Sintaxe Minimalista: Utilizar palavras-chave simples e claras.
-* Expressões Naturais: Usar estruturas que se assemelhem à linguagem humana.
-* Fluxo de Controle Simples: Facilitar a leitura e compreensão do código.
-* Variáveis e Operações Básicas: Permitir manipulação de dados de forma intuitiva.
+A Sensei suporta as seguintes funcionalidades:
+- **Declaração de variáveis**:
+  - Com ou sem valor inicial (`let x;` ou `let x is 10;`).
+- **Atribuições**:
+  - Modificar valores de variáveis (`x is x + 1;`).
+- **Operações aritméticas e relacionais**:
+  - Operadores suportados: `+`, `-`, `*`, `/`, `>`, `<`, `>=`, `<=`, `==`, `!=`.
+- **Estruturas condicionais**:
+  - `if` com suporte a `else`.
+- **Laços de repetição**:
+  - `while` com uma condição.
+- **Impressão de valores**:
+  - `print x;` para exibir valores.
 
-Palavras-chave Propostas:
+## Estrutura do Projeto
 
-* Declarando Variáveis: let
-* Atribuição: is
-* Condicional: if, else
-* Loop: while
-* Funções: function, end
-* Operadores Lógicos: and, or, not
-* Operadores Matemáticos: plus, minus, times, divided by
+O projeto está organizado nos seguintes arquivos:
 
-## Gramática em EBNF:
+- **`lexer.l`**: Define o analisador léxico da linguagem. Responsável por identificar os tokens da linguagem, como palavras-chave, identificadores e operadores.
+- **`parser.y`**: Contém o analisador sintático, que constrói a Árvore de Sintaxe Abstrata (AST) a partir dos tokens gerados pelo léxico.
+- **`ast.h` e `ast.c`**: Define e implementa as estruturas e funções para a AST.
+- **`codegen.h` e `codegen.c`**: Responsáveis pela geração de código LLVM a partir da AST.
+- **`Makefile`**: Automatiza a compilação do projeto, incluindo o léxico, parser e código de geração.
 
-Vamos agora definir a gramática da linguagem zen em EBNF.
+Exemplos de testes para a linguagem estão localizados na pasta `testes`.
 
-```
-<program> ::= { <statement> }
+## EBNF da Sensei
 
-<statement> ::= <variable_declaration> | <assignment> | <function_declaration> | <control_structure> | <expression> ";"
+A gramática da Sensei é descrita abaixo:
 
-<variable_declaration> ::= "let" <identifier> [ "is" <expression> ] ";"
+```ebnf
+PROGRAM = { STATEMENT } ;
 
-<assignment> ::= <identifier> "is" <expression> ";"
+STATEMENT = ( VARIABLE_DECLARATION | ASSIGNMENT | PRINT | IF | WHILE | BLOCK ), ";" ;
 
-<function_declaration> ::= "function" <identifier> "(" [ <parameter_list> ] ")" <block> "end"
+VARIABLE_DECLARATION = "let", IDENTIFIER, [ "is", EXPRESSION ] ;
 
-<parameter_list> ::= <identifier> { "," <identifier> }
+ASSIGNMENT = IDENTIFIER, "is", EXPRESSION ;
 
-<control_structure> ::= <if_statement> | <while_loop>
+PRINT = "print", EXPRESSION ;
 
-<if_statement> ::= "if" <expression> <block> [ "else" <block> ] "end"
+IF = "if", EXPRESSION, BLOCK, [ "else", BLOCK ] ;
 
-<while_loop> ::= "while" <expression> <block> "end"
+WHILE = "while", EXPRESSION, BLOCK ;
 
-<block> ::= { <statement> }
+BLOCK = "{", { STATEMENT }, "}" ;
 
-<expression> ::= <term> { <add_op> <term> }
+EXPRESSION = TERM, { ( "+" | "-" | ">" | "<" | ">=" | "<=" | "==" | "!=" ), TERM } ;
 
-<term> ::= <factor> { <mul_op> <factor> }
+TERM = FACTOR, { ( "*" | "/" ), FACTOR } ;
 
-<factor> ::= <number> | <identifier> | "(" <expression> ")" | <function_call>
+FACTOR = NUMBER | IDENTIFIER | "(", EXPRESSION, ")" ;
 
-<function_call> ::= <identifier> "(" [ <argument_list> ] ")"
+IDENTIFIER = LETTER, { LETTER | DIGIT } ;
 
-<argument_list> ::= <expression> { "," <expression> }
+NUMBER = DIGIT, { DIGIT } ;
 
-<add_op> ::= "plus" | "minus"
+LETTER = ( a | ... | z | A | ... | Z ) ;
 
-<mul_op> ::= "times" | "divided by"
-
-<identifier> ::= <letter> { <letter> | <digit> | "_" }
-
-<number> ::= <digit> { <digit> }
-
-<letter> ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" |
-             "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" |
-             "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" |
-             "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
-
-<digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+DIGIT = ( 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 ) ;
 ```
 
+## Como Compilar e Usar
 
-## Explicação da Gramática 
+### Pré-requisitos
 
-* **Declaração de Variáveis**: Utilizamos let para declarar variáveis. Opcionalmente, podemos atribuir um valor inicial usando is.
+- **Flex**: Para gerar o analisador léxico.
+- **Bison**: Para gerar o analisador sintático.
+- **LLVM**: Para geração de código.
 
-    ```
-    let x;
-    let y is 10;
-    ```
+### Build do Projeto
 
-* **Atribuição**: Utilizamos is para atribuir um valor a uma variável.
+Execute o comando `make` na raiz do projeto:
 
-    ```
-    x is y plus 5;
-    ```
+```bash
+make
+```
 
-* **Expressões Matemáticas**: Usamos palavras em vez de símbolos para operações.
-    
-    ```
-    total is x times y;
-    ```
+Isso irá gerar o executável `sensei.exe`.
 
-* **Estruturas de Controle**: Palavras-chave simples como if, else, while, e encerramos blocos com end.
-    
-    ```
-    if x is greater than y
-        x is x minus 1;
-    else
-        x is x plus 1;
-    end
-    ```
+### Usando a Linguagem
 
-* **Funções**: Definimos funções com function e encerramos com end.
-    
-    ```
-    function greet(name)
-        print "Hello, " plus name;
-    end
+1. Escreva um programa Sensei em um arquivo com extensão `.sns`.
+2. Para executar o programa, use o seguinte comando:
 
-    ```
+```bash
+./sensei.exe < caminho/do/arquivo.sns
+```
+
+Por exemplo:
+
+```bash
+./sensei.exe < testes/exemplo.sns
+```
+
+### Limpeza dos Arquivos Compilados
+
+Para limpar os arquivos gerados durante a compilação, execute:
+
+```bash
+make clean
+```
+
+## Contribuição
+
+Sinta-se à vontade para abrir *issues* ou enviar *pull requests* caso encontre problemas ou tenha sugestões para melhorias.
+
+---
+
+Desfrute da simplicidade e poder do Sensei! 🚀

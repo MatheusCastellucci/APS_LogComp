@@ -1,5 +1,5 @@
-let x is 5;
-if x > 3 {
+let x is 3;
+if x >= 3 {
     print x;
     print 10;
 } else {

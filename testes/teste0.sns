@@ -1,5 +1,5 @@
 let x;
 x is 10;
 let y is 20;
-x is x + y;
+x is x + y * x;
 print x;
