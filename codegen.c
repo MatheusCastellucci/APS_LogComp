@@ -120,6 +120,9 @@ LLVMValueRef codegen_node(ASTNode *node) {
 /**
  * Gera código para declaração de variáveis.
  */
+/**
+ * Gera código para declaração de variáveis.
+ */
 LLVMValueRef codegen_var_decl(ASTNode *node) {
     LLVMValueRef func = current_function ? current_function : LLVMGetNamedFunction(module, "main");
     if (!func) {
@@ -127,6 +130,15 @@ LLVMValueRef codegen_var_decl(ASTNode *node) {
         exit(1);
     }
 
+    // Verifica se a variável já foi declarada
+    for (int i = 0; i < variable_index; i++) {
+        if (strcmp(LLVMGetValueName(named_values[i]), node->identifier) == 0) {
+            fprintf(stderr, "Erro: Variável '%s' já foi declarada\n", node->identifier);
+            exit(1);
+        }
+    }
+
+    // Adiciona nova variável
     LLVMBasicBlockRef entry_block = LLVMGetEntryBasicBlock(func);
     LLVMPositionBuilderAtEnd(builder, entry_block);
     LLVMValueRef var_alloc = LLVMBuildAlloca(builder, LLVMInt32Type(), node->identifier);

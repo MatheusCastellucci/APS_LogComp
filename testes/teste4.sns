@@ -1,5 +1,3 @@
-// codigo de exemplo para fatorial
-
 let n is 5;
 let factorial is 1;
 

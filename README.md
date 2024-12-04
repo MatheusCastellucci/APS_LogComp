@@ -38,13 +38,13 @@ A gramática da Sensei é descrita abaixo:
 ```ebnf
 PROGRAM = { STATEMENT } ;
 
-STATEMENT = ( VARIABLE_DECLARATION | ASSIGNMENT | PRINT | IF | WHILE | BLOCK ), ";" ;
+STATEMENT = VARIABLE_DECLARATION | ASSIGNMENT | PRINT | IF | WHILE | BLOCK ;
 
-VARIABLE_DECLARATION = "let", IDENTIFIER, [ "is", EXPRESSION ] ;
+VARIABLE_DECLARATION = "let", IDENTIFIER, [ "is", EXPRESSION ], ";" ;
 
-ASSIGNMENT = IDENTIFIER, "is", EXPRESSION ;
+ASSIGNMENT = IDENTIFIER, "is", EXPRESSION, ";" ;
 
-PRINT = "print", EXPRESSION ;
+PRINT = "print", EXPRESSION, ";" ;
 
 IF = "if", EXPRESSION, BLOCK, [ "else", BLOCK ] ;
 
@@ -62,9 +62,9 @@ IDENTIFIER = LETTER, { LETTER | DIGIT } ;
 
 NUMBER = DIGIT, { DIGIT } ;
 
-LETTER = ( a | ... | z | A | ... | Z ) ;
+LETTER = ( "a" | ... | "z" | "A" | ... | "Z" ) ;
 
-DIGIT = ( 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 ) ;
+DIGIT = ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ) ;
 ```
 
 ## Como Compilar e Usar
@@ -83,7 +83,7 @@ Execute o comando `make` na raiz do projeto:
 make
 ```
 
-Isso irá gerar o executável `sensei.exe`.
+Isso irá gerar o executável `sensei`.
 
 ### Usando a Linguagem
 
@@ -91,13 +91,13 @@ Isso irá gerar o executável `sensei.exe`.
 2. Para executar o programa, use o seguinte comando:
 
 ```bash
-./sensei.exe < caminho/do/arquivo.sns
+./sensei caminho/do/arquivo.sns
 ```
 
 Por exemplo:
 
 ```bash
-./sensei.exe < testes/exemplo.sns
+./sensei testes/exemplo.sns
 ```
 
 ### Limpeza dos Arquivos Compilados
@@ -107,11 +107,3 @@ Para limpar os arquivos gerados durante a compilação, execute:
 ```bash
 make clean
 ```
-
-## Contribuição
-
-Sinta-se à vontade para abrir *issues* ou enviar *pull requests* caso encontre problemas ou tenha sugestões para melhorias.
-
----
-
-Desfrute da simplicidade e poder do Sensei! 🚀

@@ -1,9 +1,7 @@
-// codigo de verificacao de par ou impar
-
-let x is 7;
+let x is 8;
 
 if (x / 2) * 2 == x {
-    print x is even;
+    print 1;
 } else {
-    print x is odd;
+    print 0;
 }
