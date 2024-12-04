@@ -1,0 +1,13 @@
+// codigo exemplo de fibonacci
+let a is 0;
+let b is 1;
+let count is 0;
+let n is 10;  // Número de termos desejados
+
+while count < n {
+    print a;
+    let temp is a + b;
+    a is b;
+    b is temp;
+    count is count + 1;
+}

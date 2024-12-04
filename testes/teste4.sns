@@ -1,0 +1,11 @@
+// codigo de exemplo para fatorial
+
+let n is 5;
+let factorial is 1;
+
+while n > 0 {
+    factorial is factorial * n;
+    n is n - 1;
+}
+
+print factorial;
