@@ -1,2 +1,0 @@
-let x is 5;
-if (x > 5)  x is 10
