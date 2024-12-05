@@ -3,6 +3,8 @@
 
 Sensei é uma linguagem de programação minimalista e educacional, projetada para ensinar conceitos fundamentais de programação e compiladores. A linguagem possui uma sintaxe simples e intuitiva, ideal para iniciantes.
 
+- [Vídeo de Explicação](https://youtu.be/lIBEOEwmkVQ)
+
 ## Funcionalidades da Linguagem
 
 A Sensei suporta as seguintes funcionalidades:
@@ -107,3 +109,8 @@ Para limpar os arquivos gerados durante a compilação, execute:
 ```bash
 make clean
 ```
+
+## Desenvolvedores
+
+- Matheus Castellucci
+- Rodrigo Medeiros
